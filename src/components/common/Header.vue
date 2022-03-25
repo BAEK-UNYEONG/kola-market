@@ -12,6 +12,9 @@
       <router-link to="/shopping-cart">
         <font-awesome-icon :icon="['fas', 'cart-shopping']"/>
         Shopping Cart
+        <div class="alert">
+          2
+        </div>
       </router-link>
     </div>
     <div class="right-side">
@@ -48,6 +51,20 @@
 
       > svg {
         margin-right: 5px;
+      }
+
+      > .alert {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        margin-left: 6px;
+        padding: 0 6px 2px;
+        border-radius: 500rem;
+        background: red;
+        color: #fff;
+        font-size: 11px;
+        font-weight: bold;
       }
     }
   }

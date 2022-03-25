@@ -4,6 +4,7 @@
       <div
           v-for='(item, index) in marketItems' :key='index'
           class='item'
+          @click="onClickOpenPayPopup(item)"
       >
         <div class='image'>
           <img :src='`/${item.image}`' :alt='item.name'>
@@ -21,6 +22,10 @@
         </div>
       </div>
     </div>
+    <pay-popup
+        v-if="isPayPopupOpened"
+        @close="onClosePayPopup"
+    />
   </div>
 </template>
 
@@ -44,8 +49,13 @@
       padding: 15px;
       border-radius: 20px;
       background-color: rgba(0, 0, 0, .5);
-      box-shadow: 0 0 20px rgba(0, 0, 0, .1);
+      box-shadow: 0 0 20px rgba(0, 0, 0, .25);
       color: #fff;
+      cursor: pointer;
+
+      &:active {
+        opacity: .8;
+      }
 
       > .image {
         position: relative;
@@ -92,11 +102,15 @@
 </style>
 
 <script>
+import PayPopup from "@/components/popup/PayPopup";
 import MarketItems from "@/assets/data/market-items.json"
 
 export default {
   name: "Payment",
-  data: () => ({}),
+  components: {PayPopup},
+  data: () => ({
+    isPayPopupOpened: false,
+  }),
   computed: {
     marketItems() {
       return MarketItems.items;
@@ -105,6 +119,14 @@ export default {
   async mounted() {
     console.log(MarketItems);
   },
-  methods: {}
+  methods: {
+    onClickOpenPayPopup(item) {
+      this.isPayPopupOpened = true;
+      console.log(item);
+    },
+    onClosePayPopup() {
+      this.isPayPopupOpened = false;
+    }
+  }
 }
 </script>
