@@ -1,6 +1,6 @@
 <template>
   <div>
-    네네
+
   </div>
 </template>
 
@@ -10,6 +10,6 @@
 
 <script>
 export default {
-  name: "Payment"
+  name: "Basket"
 }
 </script>

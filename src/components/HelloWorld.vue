@@ -26,8 +26,6 @@ export default {
     console.log(acc[0], "result");
 
 
-
-
     const amount = Number(1) * parseFloat('0.008')
 
 

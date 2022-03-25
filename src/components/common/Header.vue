@@ -1,7 +1,24 @@
 <template>
   <div class="common-header">
-    <router-link to="/">Home</router-link>
-    <router-link to="/about">About</router-link>
+    <div class="container">
+      <router-link to="/">
+        <font-awesome-icon :icon="['fas', 'house']"/>
+        Kola Market
+      </router-link>
+      <router-link to="/payment">
+        <font-awesome-icon :icon="['fas', 'arrow-right-arrow-left']"/>
+        Payment
+      </router-link>
+      <router-link to="/shopping-cart">
+        <font-awesome-icon :icon="['fas', 'cart-shopping']"/>
+        Shopping Cart
+      </router-link>
+    </div>
+    <div class="right-side">
+      <div class="item">
+        지갑 연결
+      </div>
+    </div>
   </div>
 </template>
 
@@ -13,13 +30,56 @@
   width: 100%;
   height: 60px;
   background: rgba(0, 0, 0, .8);
+
+  > .container,
+  > .right-side {
+    > a, > .item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #363636;
+      color: #fff;
+      font-size: 13px;
+      text-decoration: none;
+      cursor: pointer;
+
+      > svg {
+        margin-right: 5px;
+      }
+    }
+  }
+
+  > .container {
+    display: flex;
+    flex: 1;
+    margin-left: 20px;
+
+    > a, > .item {
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  > .right-side {
+    display: flex;
+    margin-right: 20px;
+
+    > a, > .item {
+      &:not(:first-child) {
+        margin-left: 10px;
+      }
+    }
+  }
 }
 </style>
 
 <script>
 export default {
   name: "CommonHeader",
-  data: () => ({
-  })
+  data: () => ({})
 }
 </script>
