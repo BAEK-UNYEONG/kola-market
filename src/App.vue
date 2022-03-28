@@ -15,11 +15,16 @@ body {
 
 <script>
 import CommonHeader from "@/components/common/Header";
+import {mapActions} from "vuex";
 
 export default {
   name: "App",
-  components: {
-    CommonHeader
+  components: {CommonHeader},
+  async mounted() {
+    await this.loadApplication()
+  },
+  methods: {
+    ...mapActions(["loadApplication"]),
   }
 }
 </script>

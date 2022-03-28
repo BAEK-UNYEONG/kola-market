@@ -18,8 +18,28 @@
       </router-link>
     </div>
     <div class="right-side">
-      <div class="item">
+      <div
+          v-if="!web3"
+          class="item"
+          @click="onClickConnectWallet"
+      >
+        <font-awesome-icon :icon="['fas', 'wallet']"/>
         지갑 연결
+      </div>
+      <div v-if="web3" class="label">
+        <font-awesome-icon :icon="['fas', 'coins']"/>
+        Current Balance
+        <span>
+          {{ currentBalance }}
+        </span>
+        ETH
+      </div>
+      <div
+          v-if="web3"
+          class="item"
+          @click="onClickOpenWalletPopup"
+      >
+        {{ accountAddress }}
       </div>
     </div>
   </div>
@@ -36,7 +56,7 @@
 
   > .container,
   > .right-side {
-    > a, > .item {
+    > a, > .item, > .label {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -59,12 +79,21 @@
         justify-content: center;
         width: fit-content;
         margin-left: 6px;
-        padding: 0 6px 2px;
+        padding: 0 6px 2px 5px;
         border-radius: 500rem;
         background: red;
         color: #fff;
         font-size: 11px;
         font-weight: bold;
+      }
+    }
+
+    > .label {
+      background: transparent;
+      cursor: text;
+      > span {
+        margin: 0 5px;
+        color: #ffe804;
       }
     }
   }
@@ -74,7 +103,7 @@
     flex: 1;
     margin-left: 20px;
 
-    > a, > .item {
+    > a, > .item, > .label {
       &:not(:last-child) {
         margin-right: 10px;
       }
@@ -85,7 +114,9 @@
     display: flex;
     margin-right: 20px;
 
-    > a, > .item {
+    > a, > .item, > .label {
+      color: #fff;
+
       &:not(:first-child) {
         margin-left: 10px;
       }
@@ -95,8 +126,29 @@
 </style>
 
 <script>
+import {mapGetters, mapActions} from "vuex";
+
 export default {
   name: "CommonHeader",
-  data: () => ({})
+  computed: {
+    ...mapGetters(["web3", "account", "balance"]),
+    accountAddress() {
+      const first = this.account.slice(0, 6)
+      const last = this.account.slice(-4)
+      return `${first}...${last}`;
+    },
+    currentBalance() {
+      return parseFloat(this.balance).toFixed(4)
+    },
+  },
+  methods: {
+    ...mapActions(["connectWallet", "disconnectWallet"]),
+    async onClickConnectWallet() {
+      await this.connectWallet()
+    },
+    async onClickOpenWalletPopup() {
+      await this.disconnectWallet()
+    },
+  }
 }
 </script>

@@ -14,16 +14,32 @@
               {{ itemInfo.name }}
             </div>
             <div class="count">
-              <select v-model='count' id='units'>
+              <select v-model='count'>
                 <option v-for="n in 20" v-bind:key="n">{{ n }}</option>
               </select>
-              개
+              개 구입
+            </div>
+            <div class="count">
+              <select v-model='gasRate'>
+                <option v-for="n in 100" v-bind:key="n">{{ n }}</option>
+              </select>
+              배
+              <span>
+                (가스 요금 배율)
+              </span>
             </div>
           </div>
         </div>
         <div class='receiver-info'>
           보내기
-          <input v-model="receiver" placeholder="0x69f57ccEF1C2c26d2B328F2EB1BD4377742f90F3"/>
+          <input
+              ref="receiver"
+              v-model="receiver"
+              placeholder="0x69f57c..."
+          />
+          <div class="remove" @click="onClickRemoveAddress">
+            <font-awesome-icon :icon="['fas', 'xmark']"/>
+          </div>
         </div>
         <div class='pay-info'>
           <img :src="icon" alt="icon">
@@ -35,11 +51,11 @@
         </div>
       </div>
       <div class="bottom">
-        <div class="item cart">
+        <div class="item cart" @click="onClickAddItem">
           <font-awesome-icon :icon="['fas', 'cart-shopping']"/>
           장바구니 담기
         </div>
-        <div class="item">
+        <div class="item" @click="onClickDirectPay">
           <font-awesome-icon :icon="['fas', 'coins']"/>
           바로 결제하기
         </div>
@@ -58,7 +74,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, .5);
+  background: rgba(0, 0, 0, .5);
+  backdrop-filter: blur(5px);
 
   > .pay-popup-container {
     display: flex;
@@ -67,7 +84,7 @@
     width: 480px;
     min-height: 320px;
     border-radius: 20px;
-    background-color: rgba(150, 155, 160, .95);
+    background: rgba(150, 155, 160, .95);
     box-shadow: 0 0 60px rgba(0, 0, 0, .5);
 
     > .close {
@@ -80,7 +97,7 @@
       width: 48px;
       height: 48px;
       border-radius: 500rem;
-      background-color: #fff;
+      background: #fff;
       color: #1a1a1b;
       font-size: 24px;
       box-shadow: 0 0 60px rgba(0, 0, 0, .5);
@@ -134,9 +151,16 @@
             margin-top: 10px;
 
             > select {
+              width: 80px;
               padding: 5px 10px;
               border: 1px solid #000;
               outline: none;
+            }
+
+            > span {
+              color: #146EBE;
+              font-size: 13px;
+              font-weight: bold;
             }
           }
         }
@@ -171,6 +195,29 @@
           padding: 5px 10px;
           border: 1px solid #000;
           outline: none;
+        }
+
+        > .remove {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 20px;
+          height: 20px;
+          margin-left: 5px;
+          border: 1px solid #1a1a1b;
+          border-radius: 500rem;
+          background: #fff;
+          color: #1a1a1b;
+          cursor: pointer;
+
+          &:hover {
+            opacity: .8;
+          }
+
+          &:active {
+            background: #1a1a1b;
+            color: #fff;
+          }
         }
       }
     }
@@ -212,6 +259,8 @@
 </style>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "PayPopup",
   props: {
@@ -222,6 +271,7 @@ export default {
   },
   data: () => ({
     count: 1,
+    gasRate: 5,
     receiver: null,
     itemInfo: {
       id: 0,
@@ -237,12 +287,31 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["pay"]),
     show(item) {
       this.itemInfo = item;
     },
     close() {
       this.$emit("close")
-    }
+    },
+    onClickRemoveAddress() {
+      this.receiver = null;
+      this.$refs.receiver.focus();
+    },
+    onClickAddItem() {
+
+    },
+    async onClickDirectPay() {
+      const result = await this.pay({
+        id: this.itemInfo.id,
+        price: this.itemInfo.price * this.count,
+        gasRate: this.gasRate,
+        receiver: this.receiver,
+      })
+      window.open(`https://ropsten.etherscan.io/tx/${result}`)
+      alert('결제가 완료되었습니다.')
+      this.close()
+    },
   }
 }
 </script>
