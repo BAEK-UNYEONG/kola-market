@@ -7,6 +7,8 @@ import {
   faArrowRightArrowLeft,
   faCartShopping,
   faWallet,
+  faXmark,
+  faCoins,
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
@@ -14,6 +16,8 @@ library.add(faHouse)
 library.add(faArrowRightArrowLeft)
 library.add(faCartShopping)
 library.add(faWallet)
+library.add(faXmark)
+library.add(faCoins)
 
 createApp(App)
   .component("font-awesome-icon", FontAwesomeIcon)
